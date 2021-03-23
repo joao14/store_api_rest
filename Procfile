@@ -1,1 +1,1 @@
-web: gunicorn tienda_project.wsgi.py
+web: gunicorn tienda_project wsgi:py
