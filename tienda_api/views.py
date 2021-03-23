@@ -35,7 +35,7 @@ class HelloAppiView(APIView):
         return Response({'method':'PUT'})
 
     def patch(self, request, pk=None):
-        """Actualización parcial de un registro"""
+        """Actualización parcial de un registro de la base de datos"""
         return Response({'method': 'PATCH'})
 
     def delete(self, request, pk=None):
