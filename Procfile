@@ -1,1 +1,1 @@
-web: gunicorn tienda_project:wsgi
+web: gunicorn /tienda_project:wsgi
