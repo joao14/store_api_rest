@@ -1,1 +1,1 @@
-web gunicorn --pythonpath src app:app
+web gunicorn tienda_project:app
