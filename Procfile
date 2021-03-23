@@ -1,1 +1,1 @@
-web: gunicorn storebackendec.wsgi
+web gunicorn --pythonpath src app:app
