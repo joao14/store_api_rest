@@ -3,4 +3,5 @@ from tienda_api import views
 
 urlpatterns = [
     path('test/', views.HelloAppiView.as_view()),
+    path('client/', views.ClientAppiView.as_view()),
 ]
