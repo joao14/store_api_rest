@@ -47,9 +47,28 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
 
 
 class Client(models.Model):
+    __tablename__ = "client"
     id = models.AutoField(primary_key=True)
     identification = models.CharField(max_length=20)
     name = models.CharField(max_length=100)
     lastname = models.CharField(max_length=100)
     email = models.CharField(max_length=100)
     phone = models.CharField(max_length=20)
+
+
+class Store(models.Model):
+    __tablename__ = "store"
+
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=100)
+    phone = models.CharField(max_length=20)
+    direction = models.CharField(max_length=100)
+
+
+class Product(models.Model):
+    __tablename__ = "product"
+
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=100)
+    stock = models.IntegerField(default=0)
+    store = models.ForeignKey(Store, on_delete=models.CASCADE,related_name='stores')

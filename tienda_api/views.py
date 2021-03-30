@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from tienda_api import serializers
-from tienda_api.models import Client
+from tienda_api.models import *
 import json
 
 
@@ -64,3 +64,39 @@ class ClientAppiView(APIView):
             message = 'CLient haven´t been created'
 
         return Response({'message': message, 'data': client})
+
+
+class StoreAppiView(APIView):
+    serializer_class = serializers.StoreSerializer
+
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            Store.objects.create(
+                name=serializer.validated_data.get('name'),
+                phone=serializer.validated_data.get('phone'),
+                direction=serializer.validated_data.get('direction')
+            )
+            message = "Store created"
+        else:
+            message = "Store invalid"
+
+        return Response({'message': message})
+
+
+class ProductAppiView(APIView):
+    serializers_class = serializers.ProductSerializer
+
+    def post(self, request):
+        serializer = self.serializers_class(data=request.data)
+        if serializer.is_valid():
+            Product.objects.create(
+                name=serializer.validated_data.get('name'),
+                stock=serializer.validated_data.get('stock'),
+                store=serializer.validated_data.get('store')
+            )
+            message = "Product created"
+        else:
+            message = "Product invalid"
+
+        return Response({'message': message})

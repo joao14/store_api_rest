@@ -12,3 +12,14 @@ class ClientSerializer(serializers.Serializer):
     lastname = serializers.CharField(max_length=100)
     email = serializers.CharField(max_length=100)
     phone = serializers.CharField(max_length=20)
+
+class StoreSerializer(serializers.Serializer):
+
+    name = serializers.CharField(max_length=100)
+    phone = serializers.CharField(max_length=20)
+    direction = serializers.CharField(max_length=100)
+
+class ProductSerializer(serializers.Serializer):
+
+    name = serializers.CharField(max_length=100)
+    stock = serializers.IntegerField(default=0)
