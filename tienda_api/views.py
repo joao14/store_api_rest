@@ -69,7 +69,12 @@ class ClientAppiView(APIView):
 class StoreAppiView(APIView):
     serializer_class = serializers.StoreSerializer
 
+    def get(self, request):
+        store = Store.objects.all().values()
+        return Response({'message': 'Consult success', 'store': store})
+
     def post(self, request):
+        """Create new store with all your informations"""
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             Store.objects.create(
@@ -78,25 +83,76 @@ class StoreAppiView(APIView):
                 direction=serializer.validated_data.get('direction')
             )
             message = "Store created"
+            store = Store.objects.all().values()
         else:
             message = "Store invalid"
 
-        return Response({'message': message})
+        return Response({'message': message, 'stores': store})
 
 
 class ProductAppiView(APIView):
-    serializers_class = serializers.ProductSerializer
+    serializer_class = serializers.ProductSerializer
+
+    def get(self, request):
+        product = Product.objects.all().values()
+        return Response({'message': 'Consult success', 'product': product})
 
     def post(self, request):
-        serializer = self.serializers_class(data=request.data)
+        """Create new product to each store"""
+        serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             Product.objects.create(
                 name=serializer.validated_data.get('name'),
                 stock=serializer.validated_data.get('stock'),
-                store=serializer.validated_data.get('store')
+                store_id=serializer.validated_data.get('store_id')
             )
+            products = Product.objects.all().values()
             message = "Product created"
         else:
             message = "Product invalid"
 
-        return Response({'message': message})
+        return Response({'message': message, 'products': products})
+
+
+class AlbumApiView(APIView):
+    serializer_class = serializers.AlbumSerializer
+
+    def get(self, request):
+        albums = Album.objects.all().values()
+        return Response({'albums': albums})
+
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            Album.objects.create(
+                album_name=serializer.validated_data.get('album_name'),
+                artist=serializer.validated_data.get('artist')
+            )
+            album = Album.objects.filter(album_name=serializer.validated_data.get('album_name')).values()
+            message = 'Album created'
+        else:
+            message = 'Album has been a error'
+        return Response({'message': message, 'album': album})
+
+
+class TrackApiView(APIView):
+    serializer_class = serializers.TrackSerializer
+
+    def get(self, request):
+        albums = Track.objects.all().values()
+        return Response({'tracks': albums})
+
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            Track.objects.create(
+                order=serializer.validated_data.get('order'),
+                title=serializer.validated_data.get('title'),
+                duration=serializer.validated_data.get('duration'),
+                album=serializer.validated_data.get('album')
+            )
+            track = Track.objects.filter(album=serializer.validated_data.get('album')).values()
+            message = 'Track created'
+        else:
+            message = 'Track has been a error'
+        return Response({'message': message, 'album': track})

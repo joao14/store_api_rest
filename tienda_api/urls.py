@@ -6,4 +6,6 @@ urlpatterns = [
     path('client/', views.ClientAppiView.as_view()),
     path('product/', views.ProductAppiView.as_view()),
     path('store/', views.StoreAppiView.as_view()),
+    path('album/', views.AlbumApiView.as_view()),
+    path('track/', views.TrackApiView.as_view()),
 ]

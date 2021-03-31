@@ -47,6 +47,7 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
 
 
 class Client(models.Model):
+    """Model to create a new client"""
     __tablename__ = "client"
     id = models.AutoField(primary_key=True)
     identification = models.CharField(max_length=20)
@@ -54,21 +55,83 @@ class Client(models.Model):
     lastname = models.CharField(max_length=100)
     email = models.CharField(max_length=100)
     phone = models.CharField(max_length=20)
+    date_creation = models.DateTimeField('Fecha de creación', auto_now=True, auto_now_add=False)
+
+    class Meta:
+        verbose_name = 'Client'
+        verbose_name_plural = 'Clients'
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
+
+    def __str__(self):
+        return self.lastname
+
+    def __str__(self):
+        return self.email
 
 
 class Store(models.Model):
+    """Model to create a new store"""
     __tablename__ = "store"
 
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
     phone = models.CharField(max_length=20)
     direction = models.CharField(max_length=100)
+    date_creation = models.DateTimeField('Fecha de creación', auto_now=True, auto_now_add=False)
+
+    class Meta:
+        verbose_name = 'Store'
+        verbose_name_plural = 'Stores'
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
 
 
 class Product(models.Model):
+    """Model the create a new product"""
     __tablename__ = "product"
 
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
     stock = models.IntegerField(default=0)
-    store = models.ForeignKey(Store, on_delete=models.CASCADE,related_name='stores')
+    store_id = models.ManyToManyField(Store)
+    date_creation = models.DateTimeField('Fecha de creación', auto_now=True, auto_now_add=False)
+
+    class Meta:
+        verbose_name = 'Product'
+        verbose_name_plural = 'Products'
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
+
+
+class Album(models.Model):
+    """Model to create a new album"""
+    album_name = models.CharField(max_length=100)
+    artist = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.album_name
+
+
+class Track(models.Model):
+    """Track object about each albums"""
+    album = models.ForeignKey(Album, on_delete=models.CASCADE, related_name='tracks')
+    order = models.IntegerField()
+    title = models.CharField(max_length=100)
+    duration = models.IntegerField()
+
+    class Meta:
+        unique_together = ('album', 'order')
+        ordering = ['title']
+
+    def __unicode__(self):
+        return '%d: %s' % (self.order, self.title)
+
+    def __str__(self):
+        return '[ %d ]  %s' % (self.order, self.title)
